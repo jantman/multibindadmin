@@ -1,0 +1,49 @@
+/* navigation */
+	
+#nav {
+	float: left;
+	width: 100%;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	background: #ccc;
+	border-bottom: 1px solid #999;
+}
+	
+#nav li { 
+	float: left;
+	margin: 0;
+	padding: 0;
+}
+
+.activeNav a
+{
+	color: #4E4E4E !important;
+	text-decoration: underline !important;
+}
+
+#nav a {
+	float: left;
+	display: block;
+	padding: 6px 30px 6px 5px;
+	text-decoration: none;
+	font-weight: bold;
+	font-size: 90%;
+	color: #666;
+	background: #ccc url(../img/nav_slant.gif) no-repeat top right;
+}
+	
+#nav #nav-1 a {
+	padding-left: 20px;
+}
+	
+#nav a:hover {
+	color: #000;
+}
+	
+/* more */
+	
+ul#more {
+	clear: left;
+	margin-top: 60px;
+}

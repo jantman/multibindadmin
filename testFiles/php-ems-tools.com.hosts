@@ -1,0 +1,10 @@
+$ttl 38400
+php-ems-tools.com.	IN	SOA	svcs1.jasonantman.com. root.jasonantman.com. (
+			2009030700
+			10800
+			3600
+			604800
+			38400 )
+php-ems-tools.com.	IN	NS	svcs1.jasonantman.com.
+www.php-ems-tools.com.	IN	CNAME	web1.jasonantman.com.
+demo.php-ems-tools.com.	IN	CNAME	web1.jasonantman.com.

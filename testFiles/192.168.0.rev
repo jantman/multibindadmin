@@ -1,0 +1,40 @@
+$ttl 38400
+$ORIGIN 0.168.192.IN-ADDR.ARPA.
+@	IN	SOA	svcs1.jasonantman.com. root.jasonantman.com. (
+			2009030101
+			10800
+			3600
+			604800
+			38400 )
+0.168.192.in-addr.arpa.	IN	NS	svcs1.jasonantman.com.
+1	IN	PTR	er01.jasonantman.com.
+4	IN	PTR	svcs1.jasonantman.com.
+5	IN	PTR	web2.jasonantman.com.
+6	IN	PTR	saturn.jasonantman.com.
+7	IN	PTR	mailMaster.jasonantman.com.
+8	IN	PTR	mon1.jasonantman.com.
+9	IN	PTR	web1.jasonantman.com.
+10	IN	PTR	puppet.jasonantman.com.
+13	IN	PTR	stor2.jasonantman.com.
+20	IN	PTR	LRdell.jasonantman.com.
+21	IN	PTR	antmanLaptop.jasonantman.com.
+22	IN	PTR	eee-jasonantman.jasonantman.com.
+23	IN	PTR	antman-thinkpad.jasonantman.com.
+26	IN	PTR	stor1.jasonantman.com.
+24	IN	PTR	AppleTV.jasonantman.com.
+103	IN	PTR	ds1.jasonantman.com.
+95	IN	PTR	er01-mgmt.jasonantman.com.
+99	IN	PTR	gs01.jasonantman.com.
+100	IN	PTR	web1-mgmt.jasonantman.com.
+101	IN	PTR	svcs1-ilo.jasonantman.com.
+102	IN	PTR	svcs1-mgmt.jasonantman.com.
+104	IN	PTR	stor1-mgmt.jasonantman.com.
+105	IN	PTR	mailMaster-mgmt.jasonantman.com.
+106	IN	PTR	mon1-mgmt.jasonantman.com.
+107	IN	PTR	er01-ilo.jasonantman.com.
+108	IN	PTR	UPS2.jasonantman.com.
+109	IN	PTR	UPS3.jasonantman.com.
+110	IN	PTR	web2-ilo.jasonantman.com.
+111	IN	PTR	web2-mgmt.jasonantman.com.
+112	IN	PTR	stor2-mgmt.jasonantman.com.
+113	IN	PTR	puppet-mgmt.jasonantman.com.

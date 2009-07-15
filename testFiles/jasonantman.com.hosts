@@ -1,0 +1,68 @@
+	IN	NS	svcs1.jasonantman.com.
+
+mailmaster.jasonantman.com.	IN	MX	1 mailmaster.jasonantman.com.
+
+er01			IN	A	192.168.0.1
+svcs1			IN	A	192.168.0.4
+web2			IN	A	192.168.0.5
+saturn			IN	A	192.168.0.6
+mailmaster		IN	A	192.168.0.7
+mon1			IN	A	192.168.0.8
+web1			IN	A	192.168.0.9
+puppet			IN	A	192.168.0.10
+stor2			IN	A	192.168.0.13
+antmanLaptop		IN	A	192.168.0.21
+eee-jasonantman	IN	A	192.168.0.22
+antman-thinkpad	IN	A	192.168.0.23
+stor1			IN	A	192.168.0.26
+
+er01-mgmt	IN	A	192.168.0.95
+gs01		IN	A	192.168.0.99
+web1-mgmt	IN	A	192.168.0.100
+svcs1-ilo	IN	A	192.168.0.101
+svcs1-mgmt	IN	A	192.168.0.102
+ds1		IN	A	192.168.0.103
+stor1-mgmt	IN	A	192.168.0.104
+mailMaster-mgmt	IN	A	192.168.0.105
+mon1-mgmt	IN	A	192.168.0.106
+er01-ilo	IN	A	192.168.0.107
+UPS2		IN	A	192.168.0.108
+UPS3		IN	A	192.168.0.109
+web2-ilo	IN	A	192.168.0.110
+web2-mgmt	IN	A	192.168.0.111
+stor2-mgmt	IN	A	192.168.0.112
+puppet-mgmt	IN	A	192.168.0.113
+
+admin		IN	CNAME	web1
+blacklabauth	IN	CNAME	web1
+blog		IN	CNAME	web1
+bugs		IN	CNAME	web1
+consulting	IN	CNAME	web1
+cvs		IN	CNAME	web1
+mail		IN	CNAME	mailmaster
+mpac		IN	CNAME	web2
+nagios		IN	CNAME	mon1
+photos		IN	CNAME	web1
+rackman	IN	CNAME	web2
+repo		IN	CNAME	web1
+research	IN	CNAME	web1
+resume		IN	CNAME	web1
+rpms		IN	CNAME	web1
+ruslug		IN	CNAME	web1
+rutgerswork	IN	CNAME	web1
+sandbox	IN	CNAME	web1
+sandbox2	IN	CNAME	web1
+secure		IN	CNAME	web1
+subversion	IN	CNAME	web1
+svn		IN	CNAME	web1
+tuxostat	IN	CNAME	web1
+wiki		IN	CNAME	web1
+www		IN	CNAME	web1
+
+LRdell		IN	A	192.168.0.67
+LRdell		IN	TXT	"Moms Dell desktop in living room"
+LRdell		IN	TXT	"Windows XP"
+AppleTV	IN	A	192.168.0.68
+AppleTV	IN	TXT	"AppleTV in den"
+lrprint	IN	A	192.168.0.69
+lrprint	IN	TXT	"Living Room Printer - Brother HL-2170W"

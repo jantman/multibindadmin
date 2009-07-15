@@ -1,0 +1,63 @@
+admin	3600	IN	CNAME	web1
+antmanLaptop	3600	IN	A	192.168.0.21
+antman-thinkpad	3600	IN	A	192.168.0.23
+AppleTV	3600	IN	A	192.168.0.68
+AppleTV	3600	IN	TXT	"AppleTV in den"
+blacklabauth	3600	IN	CNAME	web1
+blog		3600	IN	CNAME	web1
+bugs		3600	IN	CNAME	web1
+consulting	3600	IN	CNAME	web1
+cvs		3600	IN	CNAME	web1
+ds1		3600	IN	A	192.168.0.103
+eee-jasonantman	3600	IN	A	192.168.0.22
+er01-ilo	3600	IN	A	192.168.0.107
+er01			3600	IN	A	192.168.0.1
+er01-mgmt	3600	IN	A	192.168.0.95
+gs01		3600	IN	A	192.168.0.99
+	3600	IN	NS	svcs1.jasonantman.com.
+LRdell		3600	IN	A	192.168.0.67
+LRdell		3600	IN	TXT	"Moms Dell desktop in living room"
+LRdell		3600	IN	TXT	"Windows XP"
+lrprint	3600	IN	A	192.168.0.69
+lrprint	3600	IN	TXT	"Living Room Printer - Brother HL-2170W"
+mail		3600	IN	CNAME	mailmaster
+mailmaster		3600	IN	A	192.168.0.7
+mailmaster.jasonantman.com.	3600	IN	MX	1 mailmaster.jasonantman.com.
+mailMaster-mgmt	3600	IN	A	192.168.0.105
+mon1			3600	IN	A	192.168.0.8
+mon1-mgmt	3600	IN	A	192.168.0.106
+mpac		3600	IN	CNAME	web2
+nagios		3600	IN	CNAME	mon1
+photos		3600	IN	CNAME	web1
+puppet			3600	IN	A	192.168.0.10
+puppet-mgmt	3600	IN	A	192.168.0.113
+rackman	3600	IN	CNAME	web2
+repo		3600	IN	CNAME	web1
+research	3600	IN	CNAME	web1
+resume		3600	IN	CNAME	web1
+rpms		3600	IN	CNAME	web1
+ruslug		3600	IN	CNAME	web1
+rutgerswork	3600	IN	CNAME	web1
+sandbox2	3600	IN	CNAME	web1
+sandbox	3600	IN	CNAME	web1
+saturn			3600	IN	A	192.168.0.6
+secure		3600	IN	CNAME	web1
+stor1			3600	IN	A	192.168.0.26
+stor1-mgmt	3600	IN	A	192.168.0.104
+stor2			3600	IN	A	192.168.0.13
+stor2-mgmt	3600	IN	A	192.168.0.112
+subversion	3600	IN	CNAME	web1
+svcs1-ilo	3600	IN	A	192.168.0.101
+svcs1			3600	IN	A	192.168.0.4
+svcs1-mgmt	3600	IN	A	192.168.0.102
+svn		3600	IN	CNAME	web1
+tuxostat	3600	IN	CNAME	web1
+UPS2		3600	IN	A	192.168.0.108
+UPS3		3600	IN	A	192.168.0.109
+web1			3600	IN	A	192.168.0.9
+web1-mgmt	3600	IN	A	192.168.0.100
+web2-ilo	3600	IN	A	192.168.0.110
+web2			3600	IN	A	192.168.0.5
+web2-mgmt	3600	IN	A	192.168.0.111
+wiki		3600	IN	CNAME	web1
+www		3600	IN	CNAME	web1

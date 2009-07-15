@@ -1,0 +1,36 @@
+@ 3600	IN	NS	ns15.domaincontrol.com
+@ 3600	IN	NS	ns16.domaincontrol.com
+@ 3600	IN	MX	10	mailmaster.jasonantman.com
+@ 3600	IN	MX	50	web2.jasonantman.com
+mailmaster	3600	IN	A	96.57.180.131
+mon1		3600	IN	A	96.57.180.133
+svcs1		3600	IN	A	96.57.180.132
+web1		3600	IN	A	96.57.180.130
+web2		3600	IN	A	96.57.180.134
+admin	3600	IN	CNAME	web1.jasonantman.com
+blacklabauth	3600	IN	CNAME	web1.jasonantman.com
+blog		3600	IN	CNAME	web1.jasonantman.com
+bugs		3600	IN	CNAME	web1.jasonantman.com
+consulting	3600	IN	CNAME	web1.jasonantman.com
+cvs		3600	IN	CNAME	web1.jasonantman.com
+mail		3600	IN	CNAME	mailmaster.jasonantman.com
+mpac		3600	IN	CNAME	web2.jasonantman.com
+nagios		3600	IN	CNAME	mon1.jasonantman.com
+openid		3600	IN	CNAME	web1.jasonantman.com
+photos		3600	IN	CNAME	web1.jasonantman.com
+rackman		3600	IN	CNAME	web2.jasonantman.com
+repo		3600	IN	CNAME	web1.jasonantman.com
+research	3600	IN	CNAME	web1.jasonantman.com
+resume		3600	IN	CNAME	web1.jasonantman.com
+rpms		3600	IN	CNAME	web1.jasonantman.com
+ruslug		3600	IN	CNAME	web1.jasonantman.com
+rutgerswork	3600	IN	CNAME	web1.jasonantman.com
+sandbox		3600	IN	CNAME	web1.jasonantman.com
+sandbox2	3600	IN	CNAME	web2.jasonantman.com
+secure		3600	IN	CNAME	svcs1.jasonantman.com
+smtp		3600	IN	CNAME	mailmaster.jasonantman.com
+subversion	3600	IN	CNAME	svn.jasonantman.com
+svn		3600	IN	CNAME	web1.jasonantman.com
+tuxostat	3600	IN	CNAME	web1.jasonantman.com
+wiki		3600	IN	CNAME	web1.jasonantman.com
+www		3600	IN	CNAME	web1.jasonantman.com

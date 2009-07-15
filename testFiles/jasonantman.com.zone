@@ -1,0 +1,73 @@
+; BIND zone data exported from Total DNS Control v2.19
+; Domain: jasonantman.com
+; Exported (y-m-d hh:mm:ss): 2009-07-13 18:31:17
+;
+; This file is intended for use for informational and archival
+; purposes ONLY and MUST be edited before use on a production
+; DNS server.
+;
+; In particular, you must insert a valid SOA record and
+; the correct NS records for the name servers which will
+; be authoritative for this domain.
+;
+; For further information, please consult the BIND documentation
+; located on the following website:
+;
+; http://www.isc.org/
+;
+; And RFC 1035:
+;
+; http://www.ietf.org/rfc/rfc1035.txt
+;
+; Please note that we do NOT offer technical support for any use
+; of this zone data, the BIND name server, or any other third-
+; party DNS software.
+;
+; Use at your own risk.
+
+; NS Records
+@	3600	IN	NS	ns15.domaincontrol.com	
+@	3600	IN	NS	ns16.domaincontrol.com	
+
+; A Records
+@	3600	IN	A	64.202.189.170
+@	3600	IN	A	68.178.232.100
+svcs1	3600	IN	A	96.57.180.132
+mon1	3600	IN	A	96.57.180.133
+web1	3600	IN	A	96.57.180.130
+mailmaster	3600	IN	A	96.57.180.131
+web2	1800	IN	A	96.57.180.134
+
+; CNAME Records
+mail	3600	IN	CNAME	mailmaster.jasonantman.com
+pop	3600	IN	CNAME	mailmaster.jasonantman.com
+smtp	3600	IN	CNAME	mailmaster.jasonantman.com
+www	3600	IN	CNAME	web1.jasonantman.com
+blacklabauth	3600	IN	CNAME	web1.jasonantman.com
+blog	3600	IN	CNAME	web1.jasonantman.com
+bugs	3600	IN	CNAME	web1.jasonantman.com
+consulting	3600	IN	CNAME	web1.jasonantman.com
+cvs	3600	IN	CNAME	web1.jasonantman.com
+svn	3600	IN	CNAME	web1.jasonantman.com
+photos	3600	IN	CNAME	web1.jasonantman.com
+repo	3600	IN	CNAME	web1.jasonantman.com
+research	3600	IN	CNAME	web1.jasonantman.com
+rpms	3600	IN	CNAME	web1.jasonantman.com
+rutgerswork	3600	IN	CNAME	web1.jasonantman.com
+tuxostat	3600	IN	CNAME	web1.jasonantman.com
+wiki	3600	IN	CNAME	web1.jasonantman.com
+sandbox	3600	IN	CNAME	web1.jasonantman.com
+subversion	3600	IN	CNAME	svn.jasonantman.com
+admin	3600	IN	CNAME	web1.jasonantman.com
+nagios	3600	IN	CNAME	mon1.jasonantman.com
+secure	3600	IN	CNAME	svcs1.jasonantman.com
+rackman	3600	IN	CNAME	web2.jasonantman.com
+resume	3600	IN	CNAME	web1.jasonantman.com
+ruslug	1800	IN	CNAME	web1.jasonantman.com
+sandbox2	3600	IN	CNAME	web2.jasonantman.com
+openid	1800	IN	CNAME	web1.jasonantman.com
+mpac	3600	IN	CNAME	web2.jasonantman.com
+
+; MX Records
+@	3600	IN	MX	10	mailmaster.jasonantman.com
+@	3600	IN	MX	50	foobar.jasonantman.com

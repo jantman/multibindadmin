@@ -1,0 +1,36 @@
+; BIND zone data exported from Total DNS Control v2.19
+; Domain: openepcr.org
+; Exported (y-m-d hh:mm:ss): 2009-07-13 18:37:16
+;
+; This file is intended for use for informational and archival
+; purposes ONLY and MUST be edited before use on a production
+; DNS server.
+;
+; In particular, you must insert a valid SOA record and
+; the correct NS records for the name servers which will
+; be authoritative for this domain.
+;
+; For further information, please consult the BIND documentation
+; located on the following website:
+;
+; http://www.isc.org/
+;
+; And RFC 1035:
+;
+; http://www.ietf.org/rfc/rfc1035.txt
+;
+; Please note that we do NOT offer technical support for any use
+; of this zone data, the BIND name server, or any other third-
+; party DNS software.
+;
+; Use at your own risk.
+
+; NS Records
+@	3600	IN	NS	ns39.domaincontrol.com	
+@	3600	IN	NS	ns40.domaincontrol.com	
+
+; CNAME Records
+www	1800	IN	CNAME	web1.jasonantman.com
+
+; MX Records
+@	3600	IN	MX	0	mailmaster.jasonantman.com
