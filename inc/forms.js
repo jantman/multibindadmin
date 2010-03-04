@@ -66,9 +66,95 @@ function handleUpdateRRform()
   }
 }
 
+function updateIPstuff()
+{
+  var cidr = parseInt(document.getElementById("netmask_cidr").value);
+  document.getElementById("option_subnet_mask").value = getNetMask(cidr);
+  var firstThree = document.getElementById("firstThree").value;
+  var start_ip = parseInt(document.getElementById("start_ip").value);
+  document.getElementById("end_ip").value = start_ip + (getNetworkSize(cidr) - 1);
+  document.getElementById("pool_start").value = firstThree + "." + (start_ip + 3);
+  document.getElementById("pool_end").value = firstThree + "." + ((start_ip + getNetworkSize(cidr)) - 2);
+  document.getElementById("option_log_server").value = firstThree + "." + (start_ip);
+  document.getElementById("option_time_server").value = firstThree + "." + (start_ip);
+  document.getElementById("option_dns_server").value = firstThree + "." + (start_ip);
+  document.getElementById("option_broadcast_address").value = firstThree + "." + (start_ip + (getNetworkSize(cidr) - 1));
+  document.getElementById("option_routers").value = firstThree + "." + (start_ip+1);
+}
+
 //
 // UTILITY FUNCTIONS
 //
+
+function getNetworkSize(CIDR)
+{
+  switch(CIDR)
+  {
+    case 0:
+      return 4294967296;
+    case 1:
+      return 2147483648;
+    case 2:
+      return 1073741824;
+    case 3:
+      return 536870912;
+    
+    case 24:
+      return 256;
+    case 25:
+      return 128;
+    case 26:
+      return 64;
+    case 27:
+      return 32;
+    case 28:
+      return 16;
+    case 29:
+      return 8;
+    case 30:
+      return 4;
+    case 31:
+      return 2;
+    case 32:
+      return 1;
+  }
+  return 0;
+}
+
+function getNetMask(CIDR)
+{
+  switch(CIDR)
+  {
+    case 0:
+      return "0.0.0.0";
+    case 1:
+      return "128.0.0.0";
+    case 2:
+      return "192.0.0.0";
+    case 3:
+      return "224.0.0.0";
+    
+    case 24:
+      return "255.255.255.0";
+    case 25:
+      return "255.255.255.128";
+    case 26:
+      return "255.255.255.192";
+    case 27:
+      return "255.255.255.224";
+    case 28:
+      return "255.255.255.240";
+    case 29:
+      return "255.255.255.248";
+    case 30:
+      return "255.255.255.252";
+    case 31:
+      return "255.255.255.254";
+    case 32:
+      return "255.255.255.255";
+  }
+  return "Unknown " + CIDR;
+}
 
 function createRequestObject()
 {

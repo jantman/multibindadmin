@@ -1,5 +1,5 @@
 <?php
-// index.php
+// addNetwork.php
 //
 // +----------------------------------------------------------------------+
 // | MultiBindAdmin      http://multibindadmin.jasonantman.com            |
@@ -39,7 +39,7 @@ require_once('inc/common.php');
 
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<title>Add Zone - MultiBindAdmin</title>
+<title>Add Network - MultiBindAdmin</title>
 <link rel="stylesheet" type="text/css" href="css/common.css" />
 <link rel="stylesheet" type="text/css" href="css/nav.css" />
 <script language="javascript" type="text/javascript" src="inc/forms.js"></script>
@@ -50,69 +50,56 @@ require_once('inc/common.php');
 
 <div id="content">
 
-<h2>Add Zone</h2>
+<h2>Add Network</h2>
 
-<form name="addZone" action="handlers/addZone.php" method="post">
+<form name="addNetwork" action="handlers/addNetwork.php" method="post">
 
-<div><label for="name">Name: </label><input type="text" size="30" name="name" id="name" /><em> (or address for reverse zone)</em></div>
-<div>
-<label for="type">Type: </label>
-<select name="type" id="type"><option value="forward">Forward</option><option value="reverse">Reverse</option></select>
-</div>
+<div><label for="name">Name: </label><input type="text" size="30" name="name" id="name" /><em> (descriptive)</em></div>
 <div>
 <label>Views: </label>
 <input type="radio" name="views" id="views_both" value="both" onclick="viewChange()" checked="checked" /><label>Both</label>
 <input type="radio" name="views" id="views_in" value="inside" onclick="viewChange()" /><label>Inside</label>
 <input type="radio" name="views" id="views_out" value="outside" onclick="viewChange()" /><label>Outside</label>
 </div>
-<div id="insideProviderDiv">
-<label for="insideProviderId">Inside Provider: </label>
-<select name="insideProviderId" id="insideProviderId">
-<option value="">&nbsp;</option>
-<?php
-$query = "SELECT * FROM providers;";
-$result = mysql_query($query) or dberror($query, mysql_error());
-while($row = mysql_fetch_assoc($result))
-{
-    if($row['default_for'] == "inside")
-    {
-	echo '<option value="'.$row['provider_id'].'" selected="selected">'.$row['provider_name'].'</option>'."\n";
-    }
-    else
-    {
-	echo '<option value="'.$row['provider_id'].'">'.$row['provider_name'].'</option>'."\n";
-    }
-}
-?>
-</select>
-</div> <!-- close insideProvider div -->
 
-<div id="outsideProviderDiv">
-<label for="outsideProviderId">Outside Provider: </label>
-<select name="outsideProviderId" id="outsideProviderId">
-<option value="">&nbsp;</option>
-<?php
-$query = "SELECT * FROM providers;";
-$result = mysql_query($query) or dberror($query, mysql_error());
-while($row = mysql_fetch_assoc($result))
-{
-    if($row['default_for'] == "outside")
-    {
-	echo '<option value="'.$row['provider_id'].'" selected="selected">'.$row['provider_name'].'</option>'."\n";
-    }
-    else
-    {
-	echo '<option value="'.$row['provider_id'].'">'.$row['provider_name'].'</option>'."\n";
-    }
-}
-?>
-</select>
-</div> <!-- close outsideProvider div -->
+<div><label for="firstThree">First Three Octets: </label><input type="text" size="12" name="firstThree" id="firstThree" /> <em>(i.e. xxx.xxx.xxx)</em></div>
 
-<div><label for="ttl">Ttl: </label><input type="text" size="10" name="ttl" id="ttl" value="3600" /></div>
-<div><label for="origin">Origin: </label><input type="text" size="30" name="origin" id="origin" /> <em>(if different from name)</em></div>
+<div><label for="start_ip">Starting IP: </label><input type="text" size="3" name="start_ip" id="start_ip" /> <em>(last octet of network address)</em></div>
 
-<div><input type="submit" name="Submit" value="Add Zone" /></div>
+<div><label for="netmask_cidr">CIDR Netmask: </label><input type="text" size="3" name="netmask_cidr" id="netmask_cidr" /></div>
+
+<div><a href="javascript:updateIPstuff()">Update Values</a></div>
+
+<div><label for="end_ip">Ending IP: </label><input type="text" size="3" name="end_ip" id="end_ip" /> <em>(last octet)</em></div>
+
+<div><label for="vlan_number">VLAN Number: </label><input type="text" size="4" name="vlan_number" id="vlan_number" /></div>
+
+<div><label for="authoritative">Authoritative: </label><input type="checkbox" name="authoritative" id="authoritative" checked="checked"/></div>
+
+<div><label for="allow_unknown">Allow Unknown Clients: </label><input type="checkbox" name="allow_unknown" id="allow_unknown" checked="checked"/></div>
+
+<div><label for="ddns_update">Allow DDNS Updates: </label><input type="checkbox" name="ddns_update" id="ddns_update" checked="checked"/></div>
+
+<div><label for="pool_start">Pool Start: </label><input type="text" size="15" name="pool_start" id="pool_start" /> <label for="pool_end">End: </label><input type="text" size="15" name="pool_end" id="pool_end" /></div>
+
+<h3>Options</h3>
+
+<div><label for="option_log_server">Log Server: </label><input type="text" size="15" name="option_log_server" id="option_log_server" /></div>
+
+<div><label for="option_time_server">Time Server: </label><input type="text" size="15" name="option_time_server" id="option_time_server" /></div>
+
+<div><label for="option_dns_server">DNS Server: </label><input type="text" size="15" name="option_dns_server" id="option_dns_server" /></div>
+
+<div><label for="option_domain_name">Domain Name: </label><input type="text" size="15" name="option_domain_name" id="option_domain_name" value="jasonantman.com" /></div>
+
+<div><label for="option_broadcast_address">Broadcast Address: </label><input type="text" size="15" name="option_broadcast_address" id="option_broadcast_address" /></div>
+
+<div><label for="option_subnet_mask">Subnet Mask: </label><input type="text" size="15" name="option_subnet_mask" id="option_subnet_mask" /></div>
+
+<div><label for="option_routers">Routers: </label><input type="text" size="15" name="option_routers" id="option_routers" /></div>
+
+<div><input type="submit" name="Submit" value="Add Network" /></div>
+
 </form>
 
 </div> <!-- close content div -->

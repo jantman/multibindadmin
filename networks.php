@@ -1,5 +1,5 @@
 <?php
-// rrFormPart.php
+// networks.php
 //
 // +----------------------------------------------------------------------+
 // | MultiBindAdmin      http://multibindadmin.jasonantman.com            |
@@ -30,11 +30,52 @@
 // | $LastChangedRevision::                                             $ |
 // | $HeadURL::                                                         $ |
 // +----------------------------------------------------------------------+
-
-require_once('inc/rrForm.php');
 require_once('config/config.php');
-
-addForm($_GET['type']);
-
-
+require_once('inc/common.php');
 ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>Networks - MultiBindAdmin</title>
+<link rel="stylesheet" type="text/css" href="css/common.css" />
+<link rel="stylesheet" type="text/css" href="css/nav.css" />
+</head>
+
+<body>
+<?php printHeader(); ?>
+
+<div id="content">
+
+<h2>Networks</h2>
+
+<table class="mainTable">
+<tr><th>ID</th><th>Name</th><th>Address</th><th>Usable IPs</th><th>Views</th><th>VLAN</th></tr>
+<?php
+$query = "SELECT * FROM subnets;";
+$result = mysql_query($query);
+while($row = mysql_fetch_assoc($result))
+{
+    echo '<tr>';
+    echo '<td><a href="network.php?id='.$row['subnet_id'].'">'.$row['subnet_id'].'</a></td>';
+    echo '<td>'.$row['name'].'</td>';
+    echo '<td>'.$row['firstThree'].'.'.$row['start_ip']."/".$row['netmask_cidr'].'</td>';
+    echo '<td>'.$row['firstThree'].".".($row['start_ip']+2)." - ".($row['end_ip']-1).'</td>';
+    echo '<td>'.$row['view'].'</td>';
+    echo '<td>'.$row['vlan_number'].'</td>';
+    echo '</tr>'."\n";
+}
+?>
+</table>
+
+<p class="tableBottomLink"><a href="addNetwork.php">&#43; Add Network</a></p>
+
+</div> <!-- close content div -->
+
+<?php printFooter(); ?>
+
+</body>
+
+</html>

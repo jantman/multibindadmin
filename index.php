@@ -47,6 +47,16 @@ require_once('inc/common.php');
 <body>
 <?php printHeader(); ?>
 
+<div id="content">
+
+<h2>ToDo</h2>
+<ul>
+<li>Index page</li>
+<li>Hosts - implement host_id, hosts page</li>
+<li>More search stuff</li>
+</ul>
+
+</div>
 
 <?php printFooter(); ?>
 </body>

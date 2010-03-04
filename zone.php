@@ -55,7 +55,7 @@ if(! isset($_GET['id']))
     die();
 }
 
-$query = "SELECT z.zone_id,z.name,z.views,z.last_update_ts,z.insert_ts,z.ttl,z.origin,p.provider_name AS insideProvider,p2.provider_name AS outsideProvider FROM zones AS z LEFT JOIN providers AS p ON z.inside_provider_id=p.provider_id LEFT JOIN providers AS p2 ON z.outside_provider_id=p2.provider_id WHERE z.zone_id=".((int)$_GET['id']).";";
+$query = "SELECT z.zone_id,z.type,z.name,z.views,z.last_update_ts,z.insert_ts,z.ttl,z.origin,p.provider_name AS insideProvider,p2.provider_name AS outsideProvider FROM zones AS z LEFT JOIN providers AS p ON z.inside_provider_id=p.provider_id LEFT JOIN providers AS p2 ON z.outside_provider_id=p2.provider_id WHERE z.zone_id=".((int)$_GET['id']).";";
 $result = mysql_query($query) or dberror($query, mysql_error());
 if(mysql_num_rows($result) < 1)
 {
@@ -77,6 +77,7 @@ $zoneRow = mysql_fetch_assoc($result);
 <?php
 echo '<tr><th>Created</th><td>'.date($config_long_date_format, $zoneRow['insert_ts']).'</td></tr>';
 echo '<tr><th>Modified</th><td>'.date($config_long_date_format, $zoneRow['last_update_ts']).'</td></tr>';
+echo '<tr><th>Type</th><td>'.$zoneRow['type'].'</td></tr>';
 echo '<tr><th>Views</th><td>'.$zoneRow['views'].'</td></tr>';
 if($zoneRow['views'] == "both")
 {
@@ -171,24 +172,49 @@ while($row = mysql_fetch_assoc($result))
 ?>
 </table>
 
-<?php echo '<div class="tableTitle"><h3>MX Records</h3><a href="addRecord.php?zone='.$_GET['id'].'">&#43; Add Record</a></div>'; ?>
-<table class="minorTableWide">
-<tr><th>Name</th><th>Pref</th><th>Points To/Value</th><th>View</th><th>ttl</th></tr>
 <?php
-$query = "SELECT * FROM mx_records WHERE zone_id=".$zoneRow['zone_id']." ORDER BY view,name,pref;";
-$result = mysql_query($query) or dberror($query, mysql_error());
-while($row = mysql_fetch_assoc($result))
+if($zoneRow['type'] == "forward")
 {
-    echo '<tr>';
-    echo '<td><a href="editRecord.php?zone='.$zoneRow['zone_id'].'&name='.urlencode($row['name']).'&pref='.$row['pref'].'&mxname='.urlencode($row['mx_name']).'">'.$row['name'].'</a></td>';
-    echo '<td>'.$row['pref'].'</td>';
-    echo '<td>'.$row['mx_name'].'</td>';
-    echo '<td>'.$row['view'].'</td>';
-    echo '<td>'.$row['ttl'].'</td>';
-    echo '</tr>'."\n";
+    echo '<div class="tableTitle"><h3>MX Records</h3><a href="addRecord.php?zone='.$_GET['id'].'">&#43; Add Record</a></div>';
+    echo '<table class="minorTableWide">'."\n";
+    echo '<tr><th>Name</th><th>Pref</th><th>Points To/Value</th><th>View</th><th>ttl</th></tr>'."\n";
+    $query = "SELECT * FROM mx_records WHERE zone_id=".$zoneRow['zone_id']." ORDER BY view,name,pref;";
+    $result = mysql_query($query) or dberror($query, mysql_error());
+    while($row = mysql_fetch_assoc($result))
+    {
+	echo '<tr>';
+	echo '<td><a href="editRecord.php?zone='.$zoneRow['zone_id'].'&name='.urlencode($row['name']).'&pref='.$row['pref'].'&mxname='.urlencode($row['mx_name']).'">'.$row['name'].'</a></td>';
+	echo '<td>'.$row['pref'].'</td>';
+	echo '<td>'.$row['mx_name'].'</td>';
+	echo '<td>'.$row['view'].'</td>';
+	echo '<td>'.$row['ttl'].'</td>';
+	echo '</tr>'."\n";
+    }
+    echo '</table>'."\n";
 }
+else
+{
+    // reverse zone
+    echo '<div class="tableTitle"><h3>PTR Records</h3></div>';
+    $PTRs = getPTRarray($zoneRow['zone_id']);
+
+    echo '<table class="minorTableWide">'."\n";
+    echo '<tr><th>Address</th><th>Type</th><th>Points To</th><th>View</th><th>ttl</th><th>Zone</th></tr>'."\n";
+    foreach($PTRs as $arr)
+    {
+	echo '<tr>';
+	echo '<td>'.$arr['value_host'].'</td>';
+	echo '<td>PTR</td>';
+	echo '<td>'.$arr['name'].'</td>';
+	echo '<td>'.$arr['view'].'</td>';
+	echo '<td>'.$arr['ttl'].'</td>';
+	echo '<td>'.$arr['zoneName'].'</td>';
+	echo '</tr>'."\n";
+    }
+    echo '</table>'."\n";
+}
+echo "<br />";
 ?>
-</table>
 
 </div> <!-- close content div -->
 

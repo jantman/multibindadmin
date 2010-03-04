@@ -75,6 +75,40 @@ while($row = mysql_fetch_assoc($result))
 </p>
 </div> <!-- CLOSE provider form div -->
 
+<div> <!-- increment serial div -->
+<h3>Increment Zone Serials</h3>
+<form name="incrementZone" action="handlers/incrementZone.php" method="post" />
+<table class="mainTable">
+<tr><th>ID</th><th>Zone</th><th>Internal</th><th>External</th></tr>
+<?php
+$query = "SELECT zone_id,name,type,views FROM zones;";
+$result = mysql_query($query) or dberror($query, mysql_error());
+while($row = mysql_fetch_assoc($result))
+{
+    echo '<tr><td>'.$row['zone_id'].'</td><td>'.$row['name'];
+    if($row['type'] == "reverse"){ echo " (reverse)";}
+    echo '</td>';
+    if($row['views'] == "both")
+    {
+	echo '<td><input type="checkbox" name="zone_'.$row['zone_id'].'_inside" /></td><td><input type="checkbox" name="zone_'.$row['zone_id'].'_outside" /></td>';
+    }
+    elseif($row['views'] == "inside")
+    {
+	echo '<td><input type="checkbox" name="zone_'.$row['zone_id'].'_inside" /></td><td>&nbsp;</td>';
+    }
+    else
+    {
+	echo '<td>&nbsp;</td><td><input type="checkbox" name="zone_'.$row['zone_id'].'_outside" /></td>';
+    }
+    echo '</tr>';
+}
+?>
+</table>
+<input type="submit" name="Submit" value="Increment Zone Serials" />
+</form>
+</div> <!-- CLOSE increment serial div -->
+
+
 </div> <!-- close content div -->
 
 <?php printFooter(); ?>

@@ -50,6 +50,7 @@ if($type == "A")
     $query = "INSERT INTO r_records SET zone_id=".((int)$zone).",view='".mysql_real_escape_string($_POST['views'])."',name='".mysql_real_escape_string($_POST['name'])."',value='".mysql_real_escape_string($_POST['value'])."',ttl=".((int)$_POST['ttl']).",rr_type='A',insert_ts=".time().",last_update_ts=".time();
     if(trim($_POST['value2']) != ""){ $query .= ",value2='".mysql_real_escape_string($_POST['value2'])."'";}
     $query .= ";";
+    $query2 = "INSERT INTO dhcp_hosts SET rr_view='".mysql_real_escape_string($_POST['views'])."',rr_name='".mysql_real_escape_string($_POST['name'])."',rr_value='".mysql_real_escape_string($_POST['value'])."',mac_address='".mysql_real_escape_string($POST['mac_addr'])."';";
 }
 elseif($type == "CNAME")
 {
@@ -78,7 +79,9 @@ elseif($type == "TXT")
 
 $result = mysql_query($query) or dberror($query, mysql_error());
 
-$query = "UPDATE soa_records SET current_serial=".date("Ymds")." WHERE zone_id=".((int)$zone)." AND (view='".mysql_real_escape_string($_POST['views'])."' OR view='both');";
+if(isset($query2)){ $result = mysql_query($query2) or dberror($query2, mysql_error());}
+
+updateZoneSerial($zone, $_POST['views']);
 
 header("Location: ../zone.php?id=".$zone);
 

@@ -32,6 +32,7 @@
 // +----------------------------------------------------------------------+
 require_once('config/config.php');
 require_once('inc/common.php');
+require_once('inc/rrForm.php');
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -49,6 +50,19 @@ require_once('inc/common.php');
 <body>
 <?php
 printHeader(); 
+
+if(! isset($_GET['zone']))
+{
+    echo '<p class="error">ERROR: No zone ID specified.</p>';
+    printFooter();
+    die();
+}
+if(! isset($_GET['type']) && ! isset($_GET['mxname']))
+{
+    echo '<p class="error">ERROR: No RR type or MX name specified.</p>';
+    printFooter();
+    die();
+}
 
 $query = "SELECT z.zone_id,z.name,z.views FROM zones AS z WHERE z.zone_id=".((int)$_GET['zone']).";";
 $result = mysql_query($query) or dberror($query, mysql_error());
@@ -72,32 +86,56 @@ $zoneRow = mysql_fetch_assoc($result);
 echo '<input type="hidden" name="zone_id" value="'.$zoneRow['zone_id'].'" />';
 ?>
 
-<div id="rrType">
-<label for="rr_type">Type: </label>
-<select name="rr_type" id="rr_type" onchange="updateRRform()">
-<option value="" selected="selected">&nbsp;</option>
-<option value="A">A</option>
-<option value="CNAME">CNAME</option>
-<option value="MX">MX</option>
-<option value="NS">NS</option>
-<option value="PTR">PTR</option>
-<option value="SRV">SRV</option>
-<option value="TXT">TXT</option>
-</select>
-</div> <!-- close rrType div -->
+<div><label for="zoneName">Zone: </label><span id="zoneName"><?php echo $zoneRow['name']." (".$zoneRow['zone_id'].")"; ?></span></div>
+
+<?php
+if(isset($_GET['mxname']))
+{
+    $query = "SELECT * FROM mx_records WHERE zone_id=".$zoneRow['zone_id']." AND pref=".((int)$_GET['pref'])." AND name='".mysql_real_escape_string($_GET['name'])."' AND mx_name='".mysql_real_escape_string($_GET['mxname'])."';";
+    echo '<div id="rrType"><label for="rr_type">Type: </label><span id="rr_type">MX</span></div>';
+    echo '<input type="hidden" name="orig_pref" value="'.((int)$_GET['pref']).'" />';
+    echo '<input type="hidden" name="orig_name" value="'.mysql_real_escape_string($_GET['name']).'" />';
+    echo '<input type="hidden" name="orig_mxname" value="'.mysql_real_escape_string($_GET['mxname']).'" />';
+    echo '<input type="hidden" name="rr_type" value="MX" />';
+}
+else
+{
+    $query = "SELECT r.*,dh.mac_address FROM r_records AS r LEFT JOIN dhcp_hosts AS dh ON r.name=dh.rr_name AND r.value=dh.rr_value AND r.view=dh.rr_view WHERE zone_id=".$zoneRow['zone_id']." AND rr_type='".mysql_real_escape_string($_GET['type'])."' AND name='".mysql_real_escape_string($_GET['name'])."' AND value='".mysql_real_escape_string($_GET['value'])."' AND view='".mysql_real_escape_string($_GET['view'])."';";
+    echo '<div id="rrType"><label for="rr_type">Type: </label><span id="rr_type">'.$_GET['type'].'</span></div>';
+    echo '<input type="hidden" name="rr_type" value="'.$_GET['type'].'" />';
+    echo '<input type="hidden" name="orig_name" value="'.$_GET['name'].'" />';
+    echo '<input type="hidden" name="orig_value" value="'.str_replace('"', '&quot;', $_GET['value']).'" />';
+    echo '<input type="hidden" name="orig_view" value="'.$_GET['view'].'" />';
+}
+$result = mysql_query($query) or dberror($query, mysql_error());
+$row = mysql_fetch_assoc($result);
+
+?>
+
 <div>
 <label>Views: </label>
-<input type="radio" name="views" id="views_both" value="both" onclick="viewChange()" checked="checked" /><label>Both</label>
-<input type="radio" name="views" id="views_in" value="inside" onclick="viewChange()" /><label>Inside</label>
-<input type="radio" name="views" id="views_out" value="outside" onclick="viewChange()" /><label>Outside</label>
+<input type="radio" name="views" id="views_both" value="both"  <?php if($row['view'] == "both"){ echo 'checked="checked"';} ?> /><label>Both</label>
+<input type="radio" name="views" id="views_in" value="inside"  <?php if($row['view'] == "inside"){ echo 'checked="checked"';} ?> /><label>Inside</label>
+<input type="radio" name="views" id="views_out" value="outside"  <?php if($row['view'] == "outside"){ echo 'checked="checked"';} ?> /><label>Outside</label>
 </div>
 
-<!-- this div is filled in via the updateRRform() JS function -->
-<!-- the form fields are pulled via rrFormPart.php -->
-<div id="rr_form_fields"></div>
+<div id="rr_form_fields">
+<?php
+if(isset($_GET['mxname']))
+{
+    editMxForm($row['name'], $row['ttl'], $row['pref'], $row['mx_name']);
+}
+else
+{
+    editForm($_GET['type'], $row['name'], $row['ttl'], $row['value'], $row['value2'], $row['mac_address']);
+}
+?>
 
-<div>
-<input type="submit" name="Submit" value="Add RR" /></div>
+</div>
+
+<div><input type="submit" name="Submit" value="Update RR" /></div>
+<br /><br /><br /><br />
+<div><input type="submit" name="Submit" value="DELETE RR" /></div>
 </form>
 
 </div> <!-- close content div -->

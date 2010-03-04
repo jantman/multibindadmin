@@ -1,5 +1,5 @@
 <?php
-// editSOA.php handler
+// handlers/addNetwork.php
 //
 // +----------------------------------------------------------------------+
 // | MultiBindAdmin      http://multibindadmin.jasonantman.com            |
@@ -33,38 +33,56 @@
 require_once('../config/config.php');
 require_once('../inc/common.php');
 
-$zone_id = (int)$_POST['zone_id'];
-
-// find out if we're updating or inserting
-$query = "SELECT * FROM soa_records WHERE zone_id=".$zone_id." AND view='".mysql_real_escape_string($_POST['view'])."';";
-$result = mysql_query($query) or dberror($query, mysql_error());
-if(mysql_num_rows($result) < 1)
+if(isset($_POST['name']))
 {
-    $is_insert = true;
-    $query = "INSERT INTO soa_records SET ";
-}
-else
-{
-    $query = "UPDATE soa_records SET ";
-    $row = mysql_fetch_assoc($result);
-}
+    $name = $_POST['name'];
+    $query = "SELECT * FROM networks WHERE name='".mysql_real_escape_string($name)."';";
+    $result = mysql_query($query) or dberror($query, mysql_error());
+    if(mysql_num_rows($result) > 0)
+    {
+	printHeader();
+	echo '<h2>ERROR</h2><p class="errorP">Network with name "'.$name.'" already exists.</p>';
+	printFooter();
+	die();
+    }
+
+    $query = "SET AUTOCOMMIT=0;";
+    $result = mysql_query($query) or dberror($query, mysql_error());
+    $query = "START TRANSACTION;";
+    $result = mysql_query($query) or dberror($query, mysql_error());
+
+    $query = "INSERT INTO subnets SET name='".mysql_real_escape_string($name)."',firstThree='".mysql_real_escape_string($_POST['firstThree'])."',view='".mysql_real_escape_string($_POST['views'])."',vlan_number=".((int)$_POST['vlan_number']).",start_ip=".((int)$_POST['start_ip']).",end_ip=".((int)$_POST['end_ip']).",netmask_cidr=".((int)$_POST['netmask_cidr']).",last_update_ts=".time().",insert_ts=".time();
+    if(isset($_POST['authoritative'])){ $query .= ",authoritative=1";}
+    if(isset($_POST['allow_unknown'])){ $query .= ",allow_unknown=1";}
+    if(isset($_POST['ddns_update'])){ $query .= ",allow_ddns=1";}
+    $query .= ";";
+    $result = mysql_query($query) or dberror($query, mysql_error());
+    $subnet_id = mysql_insert_id();
+
+    $query = "INSERT INTO dhcp_pools SET subnet_id=$subnet_id,start_ip='".mysql_real_escape_string($_POST['start_ip'])."',end_ip='".mysql_real_escape_string($_POST['end_ip'])."';";
+    $result = mysql_query($query) or dberror($query, mysql_error());
+
+    foreach($_POST as $key => $val)
+    {
+	if(substr($key, 0, 7) != "option_"){ continue;}
+	$opt = substr($key, 7);
+	$query = "INSERT INTO dhcp_subnet_options SET subnet_id=$subnet_id,option_name='".mysql_real_escape_string($opt)."',option_value='".mysql_real_escape_string($val)."';";
+    }
+
+    /* DEBUG
+    echo $query;
+    mysql_query("ROLLBACK;");
+    die();
+     END DEBUG
+    */
 
 
-$query .= "ttl=".((int)$_POST['ttl']).",class='".mysql_real_escape_string($_POST['class'])."',name_server='".mysql_real_escape_string($_POST['name-server'])."',email_addr='".mysql_real_escape_string($_POST['email-addr'])."',refresh=".((int)$_POST['refresh']).",retry=".((int)$_POST['retry']).",expiry=".((int)$_POST['expiry']).",minimum=".((int)$_POST['minimum']).",zone_id=".$zone_id.",view='".mysql_real_escape_string($_POST['view'])."'";
 
-$query .= ",last_update_ts=".time();
-if($is_insert)
-{
-    $query .= ",insert_ts=".time().",current_serial=".date("Ymd")."00";
-}
-else
-{
-    $query .= " WHERE zone_id=".$zone_id." AND view='".mysql_real_escape_string($_POST['view'])."'";
-}
+    $query = "COMMIT;";
+    $result = mysql_query($query) or dberror($query, mysql_error());
 
-$query .= ";";
-$result = mysql_query($query) or dberror($query, mysql_error());
-updateZoneSerial($zone_id, mysql_real_escape_string($_POST['view']));
-header("Location: ../zone.php?id=".$_POST['zone_id']);
+    header("Location: ../networks.php");
+
+}
 
 ?>

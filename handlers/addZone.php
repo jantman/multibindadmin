@@ -1,5 +1,5 @@
 <?php
-// index.php
+// handlers/addZone.php
 //
 // +----------------------------------------------------------------------+
 // | MultiBindAdmin      http://multibindadmin.jasonantman.com            |
@@ -67,12 +67,26 @@ if(isset($_POST['name']))
 	printFooter();
 	die();
     }
-    $query = "INSERT INTO zones SET name='".mysql_real_escape_string($name)."',views='".mysql_real_escape_string($_POST['views'])."',";
+    $query = "INSERT INTO zones SET name='".mysql_real_escape_string($name)."',type='".mysql_real_escape_string($_POST['type'])."',views='".mysql_real_escape_string($_POST['views'])."',";
     if($_POST['views'] == "both"){ $query .= "inside_provider_id=".((int)$_POST['insideProviderId']).",outside_provider_id=".((int)$_POST['outsideProviderId']).",";}
     elseif($_POST['views'] == "inside"){ $query .= "inside_provider_id=".((int)$_POST['insideProviderId']).",";}
     else { $query .= "outside_provider_id=".((int)$_POST['outsideProviderId']).",";}
-    if(! isset($_POST['origin']) || trim($_POST['origin']) == ""){ $_POST['origin'] = $_POST['name'];}
-    if(substr($_POST['origin'], strlen($_POST['origin'])-1) != "."){ $_POST['origin'] .= ".";}
+    // handle reverse
+    if($_POST['type'] == "reverse")
+    {
+	$foo = explode(".", $name);
+	$bar = "";
+	for($i = count($foo)-1; $i >=0; $i--)
+	{
+	    $bar .= $foo[$i].".";
+	}
+	$_POST['origin'] = $bar."IN-ADDR.ARPA.";
+    }
+    else
+    {
+	if(! isset($_POST['origin']) || trim($_POST['origin']) == ""){ $_POST['origin'] = $_POST['name'];}
+	if(substr($_POST['origin'], strlen($_POST['origin'])-1) != "."){ $_POST['origin'] .= ".";}
+    }
     $query .= "origin='".$_POST['origin']."',ttl=".((int)$_POST['ttl']).",last_update_ts=".time().",insert_ts=".time().";";
     $result = mysql_query($query) or dberror($query, mysql_error());
     header("Location: ../zones.php");

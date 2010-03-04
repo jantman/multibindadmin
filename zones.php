@@ -52,14 +52,14 @@ require_once('inc/common.php');
 <h2>Zones</h2>
 
 <table class="mainTable">
-<tr><th rowspan="2">ID</th><th rowspan="2">Name</th><th rowspan="2">Views</th><th colspan="3">Inside</th><th colspan="3">Outside</th></tr>
+<tr><th rowspan="2">ID</th><th rowspan="2">Name</th><th rowspan="2">Type</th><th rowspan="2">Views</th><th colspan="3">Inside</th><th colspan="3">Outside</th></tr>
 <tr><th>Serial</th><th>RRs</th><th>Provider</th><th>Serial</th><th>RRs</th><th>Provider</th></tr>
 <?php
-$query = "SELECT z.zone_id,z.name,z.views,p.provider_name AS insideProvider,p2.provider_name AS outsideProvider FROM zones AS z LEFT JOIN providers AS p ON z.inside_provider_id=p.provider_id LEFT JOIN providers AS p2 ON z.outside_provider_id=p2.provider_id;";
+$query = "SELECT z.zone_id,z.name,z.type,z.views,p.provider_name AS insideProvider,p2.provider_name AS outsideProvider FROM zones AS z LEFT JOIN providers AS p ON z.inside_provider_id=p.provider_id LEFT JOIN providers AS p2 ON z.outside_provider_id=p2.provider_id;";
 $result = mysql_query($query);
 while($row = mysql_fetch_assoc($result))
 {
-    echo '<tr><td><a href="zone.php?id='.$row['zone_id'].'">'.$row['zone_id'].'</a></td><td>'.$row['name'].'</td><td>'.$row['views'].'</td>';
+    echo '<tr><td><a href="zone.php?id='.$row['zone_id'].'">'.$row['zone_id'].'</a></td><td>'.$row['name'].'</td><td>'.$row['type'].'</td><td>'.$row['views'].'</td>';
     if($row['views'] == "both")
     {
 	// inside
