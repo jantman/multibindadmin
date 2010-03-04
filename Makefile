@@ -3,4 +3,4 @@
 ALL: dump
 
 dump: 
-	mysqldump multibindadmin > dump.sql
+	mysqldump --no-data multibindadmin > dump.sql

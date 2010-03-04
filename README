@@ -1,0 +1,4 @@
+Notes:
+
+the bin/multibind-update.php script is run on the master BIND server and pulls
+down all changed zone files.
