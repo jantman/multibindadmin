@@ -33,9 +33,11 @@
 require_once('../config/config.php');
 require_once('../inc/common.php');
 
+/*
 echo '<pre>';
 echo var_dump($_POST);
 echo '</pre>';
+*/
 
 if(! isset($_POST['zone_id']) || ! isset($_POST['rr_type']))
 {
@@ -75,6 +77,10 @@ elseif($type == "SRV")
 elseif($type == "TXT")
 {
     $query = "INSERT INTO r_records SET zone_id=".((int)$zone).",view='".mysql_real_escape_string($_POST['views'])."',name='".mysql_real_escape_string($_POST['name'])."',value='".mysql_real_escape_string($_POST['value'])."',ttl=".((int)$_POST['ttl']).",rr_type='TXT',insert_ts=".time().",last_update_ts=".time().";";
+}
+elseif($type == "SPF")
+{
+    $query = "INSERT INTO r_records SET zone_id=".((int)$zone).",view='".mysql_real_escape_string($_POST['views'])."',name='".mysql_real_escape_string($_POST['name'])."',value='".mysql_real_escape_string($_POST['value'])."',ttl=".((int)$_POST['ttl']).",rr_type='SPF',insert_ts=".time().",last_update_ts=".time().";";
 }
 
 $result = mysql_query($query) or dberror($query, mysql_error());

@@ -147,7 +147,14 @@ while($row = mysql_fetch_assoc($result))
 {
     echo '<tr>';
     echo '<td><a href="editRecord.php?zone='.$zoneRow['zone_id'].'&name='.urlencode($row['name']).'&value='.urlencode($row['value']).'&type='.urlencode($row['rr_type']).'&view='.urlencode($row['view']).'">'.$row['name'].'</a></td>';
-    echo '<td>'.$row['rr_type'].'</td>';
+    if($row['rr_type'] == "SPF")
+    {
+	echo '<td>SPF (&amp; TXT)</td>';
+    }
+    else
+    {
+	echo '<td>'.$row['rr_type'].'</td>';
+    }
     echo '<td>'.$row['value'].'</td>';
     if($row['value2'] != null && trim($row['value2']) != "" && $row['value2'] != $row['value1'] && $row['view'] == "both")
     {

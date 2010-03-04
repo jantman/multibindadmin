@@ -76,6 +76,13 @@ function editForm($type, $name, $ttl, $value, $value2, $mac_addr)
 	$value = str_replace('"', '&quot;', $value);
 	echo '<div><label for="value">Text: </label><input type="text" size="40" name="value" id="value" value="'.$value.'" /></div>'."\n";
     }
+    elseif($type == "SPF")
+    {
+	echo '<div><label for="name">Name: </label><input type="text" size="30" name="name" id="name" value="'.$name.'" /></div>'."\n";
+	echo '<div><label for="ttl">TTL: </label><input type="text" size="10" name="ttl" id="ttl" value="'.$ttl.'" /> <em>( default '.$config_default_rr_ttl.')</em></div>'."\n";
+	$value = str_replace('"', '&quot;', $value);
+	echo '<div><label for="value">Text: </label><input type="text" size="40" name="value" id="value" value="'.$value.'" /></div>'."\n";
+    }
     else
     {
 	echo "&nbsp;";
@@ -135,6 +142,12 @@ function addForm($type)
 	echo '<div><label for="name">Name: </label><input type="text" size="30" name="name" id="name" /></div>'."\n";
 	echo '<div><label for="ttl">TTL: </label><input type="text" size="10" name="ttl" id="ttl" value="'.$config_default_rr_ttl.'" /> <em>( default '.$config_default_rr_ttl.')</em></div>'."\n";
 	echo '<div><label for="value">Text: </label><input type="text" size="40" name="value" id="value" /></div>'."\n";
+    }
+    elseif($type == "SPF")
+    {
+	echo '<div><label for="name">Name: </label><input type="text" size="30" name="name" id="name" /></div>'."\n";
+	echo '<div><label for="ttl">TTL: </label><input type="text" size="10" name="ttl" id="ttl" value="'.$config_default_rr_ttl.'" /> <em>( default '.$config_default_rr_ttl.')</em></div>'."\n";
+	echo '<div><label for="value">Text: </label><input type="text" size="40" name="value" id="value" value="&quot;v=spf1 &quot;" /></div>'."\n";
     }
     else
     {

@@ -117,6 +117,12 @@ else
 	error_log($query);
 	$result = mysql_query($query) or dberror($query, mysql_error());
     }
+    elseif($type == "SPF")
+    {
+	$query = "UPDATE r_records SET view='".mysql_real_escape_string($_POST['views'])."',name='".mysql_real_escape_string($_POST['name'])."',value='".mysql_real_escape_string($_POST['value'])."',ttl=".((int)$_POST['ttl']).",last_update_ts=".time()." WHERE zone_id=".((int)$zone)." AND rr_type='SPF' AND name='".mysql_real_escape_string($_POST['orig_name'])."' AND value='".mysql_real_escape_string($_POST['orig_value'])."' AND view='".mysql_real_escape_string($_POST['orig_view'])."';";
+	error_log($query);
+	$result = mysql_query($query) or dberror($query, mysql_error());
+    }
 }
 
 

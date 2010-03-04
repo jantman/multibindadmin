@@ -84,10 +84,12 @@ echo '<input type="hidden" name="zone_id" value="'.$zoneRow['zone_id'].'" />';
 <select name="rr_type" id="rr_type" onchange="updateRRform()">
 <option value="" selected="selected">&nbsp;</option>
 <option value="A">A</option>
+<option value="AAAA">AAAA</option>
 <option value="CNAME">CNAME</option>
 <option value="MX">MX</option>
 <option value="NS">NS</option>
 <option value="PTR">PTR</option>
+<option value="SPF">SPF</option>
 <option value="SRV">SRV</option>
 <option value="TXT">TXT</option>
 </select>

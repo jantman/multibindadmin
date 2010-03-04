@@ -52,6 +52,10 @@ if(isset($_GET['hostname']))
 {
     searchHostname($_GET['hostname']);
 }
+elseif(isset($_GET['type']))
+{
+    searchType($_GET['type']);
+}
 else
 {
     showSearchForm();
@@ -177,6 +181,142 @@ function searchHostname($hostname)
     echo '</div> <!-- close content div -->'."\n";
 }
 
+function searchType($type)
+{
+    echo '<div id="content">'."\n";
+
+    echo '<h2>Search Result: rr type "'.$type.'"</h2>';
+
+    if($type == "NS")
+    {
+	// NS records
+	echo '<div class="tableTitle"><h3>NS Records</h3></div>';
+	echo '<table class="minorTableWide">'."\n";
+	echo '<tr><th>Zone</th><th>Name</th><th>Type</th><th>Points To/Value</th><th>View</th><th>ttl</th></tr>'."\n";
+	$query = "SELECT r.*,z.name AS zone_name FROM r_records AS r LEFT JOIN zones AS z ON r.zone_id=z.zone_id WHERE r.rr_type='NS' ORDER BY z.name ASC, r.name ASC,r.view ASC;";
+	$result = mysql_query($query) or dberror($query, mysql_error());
+	while($row = mysql_fetch_assoc($result))
+	{
+	    echo '<tr>';
+	    echo '<td><a href="zone.php?id='.$row['zone_id'].'">'.$row['zone_name'].' ('.$row['zone_id'].')</a></td>';
+	    echo '<td><a href="editRecord.php?zone='.$row['zone_id'].'&name='.urlencode($row['name']).'&value='.urlencode($row['value']).'&type='.urlencode($row['rr_type']).'&view='.urlencode($row['view']).'">'.$row['name'].'</a></td>';
+	    echo '<td>'.$row['rr_type'].'</td>';
+	    echo '<td>'.$row['value'].'</td>';
+	    echo '<td>'.$row['view'].'</td>';
+	    echo '<td>'.$row['ttl'].'</td>';
+	    echo '</tr>'."\n";
+	}
+	echo '</table>'."\n";
+    }
+    elseif($type == "MX")
+    {
+	// MX records
+	echo '<div class="tableTitle"><h3>MX Records</h3></div>'."\n";
+	echo '<table class="minorTableWide">'."\n";
+	echo '<tr><th>Zone</th><th>Name</th><th>Pref</th><th>Points To/Value</th><th>View</th><th>ttl</th></tr>'."\n";
+	$query = "SELECT m.*,z.name AS zone_name FROM mx_records AS m LEFT JOIN zones AS z ON m.zone_id=z.zone_id ORDER BY z.name,m.view,m.name,m.pref;";
+	$result = mysql_query($query) or dberror($query, mysql_error());
+	while($row = mysql_fetch_assoc($result))
+	{
+	    echo '<tr>';
+	    echo '<td><a href="zone.php?id='.$row['zone_id'].'">'.$row['zone_name'].' ('.$row['zone_id'].')</a></td>';
+	    echo '<td><a href="editRecord.php?zone='.$row['zone_id'].'&name='.urlencode($row['name']).'&pref='.$row['pref'].'&mxname='.urlencode($row['mx_name']).'">'.$row['name'].'</a></td>';
+	    //echo '<td>'.$row['name'].'</td>';
+	    echo '<td>'.$row['pref'].'</td>';
+	    echo '<td>'.$row['mx_name'].'</td>';
+	    echo '<td>'.$row['view'].'</td>';
+	    echo '<td>'.$row['ttl'].'</td>';
+	    echo '</tr>'."\n";
+	}
+	echo '</table>'."\n";
+    }
+    else
+    {
+	// A records
+	echo '<div class="tableTitle"><h3>A Records</h3></div>';
+	echo '<table class="minorTableWide">'."\n";
+	echo '<tr><th>Zone</th><th>Name</th><th>Type</th><th>Points To/Value</th><th>View</th><th>ttl</th></tr>'."\n";
+	$query = "SELECT r.*,z.name AS zone_name FROM r_records AS r LEFT JOIN zones AS z ON r.zone_id=z.zone_id WHERE r.rr_type='$type' ORDER BY z.name ASC, r.name ASC,r.view ASC;";
+	$result = mysql_query($query) or dberror($query, mysql_error());
+	while($row = mysql_fetch_assoc($result))
+	{
+	    echo '<tr>';
+	    echo '<td><a href="zone.php?id='.$row['zone_id'].'">'.$row['zone_name'].' ('.$row['zone_id'].')</a></td>';
+	    echo '<td><a href="editRecord.php?zone='.$row['zone_id'].'&name='.urlencode($row['name']).'&value='.urlencode($row['value']).'&type='.urlencode($row['rr_type']).'&view='.urlencode($row['view']).'">'.$row['name'].'</a></td>';
+	    if($row['rr_type'] == "SPF")
+	    {
+		echo '<td>SPF (&amp; TXT)</td>';
+	    }
+	    else
+	    {
+		echo '<td>'.$row['rr_type'].'</td>';
+	    }
+	    echo '<td>'.$row['value'].'</td>';
+	    if($row['value2'] != null && trim($row['value2']) != "" && $row['value2'] != $row['value1'] && $row['view'] == "both")
+	    {
+		echo '<td>*inside*</td>';
+		echo '<td>'.$row['ttl'].'</td>';
+		echo '</tr>'."\n";
+		
+		// outside side
+		echo '<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>';
+		echo '<td>'.$row['value2'].'</td>';
+		echo '<td>*outside*</td>';
+		echo '<td>&nbsp;</td>';
+		echo '</tr>'."\n";
+	    }
+	    else
+	    {
+		echo '<td>'.$row['view'].'</td>';
+		echo '<td>'.$row['ttl'].'</td>';
+		echo '</tr>'."\n";
+	    }
+	}
+	echo '</table>'."\n";
+    }
+/*
+    // CNAMES
+    echo '<div class="tableTitle"><h3>CNAME Records</h3></div>';
+    echo '<table class="minorTableWide">'."\n";
+    echo '<tr><th>Zone</th><th>Name</th><th>Type</th><th>Points To/Value</th><th>View</th><th>ttl</th></tr>'."\n";
+    $query = "SELECT r.*,z.name AS zone_name FROM r_records AS r LEFT JOIN zones AS z ON r.zone_id=z.zone_id WHERE r.rr_type='CNAME' AND (r.name LIKE '%".$hostname."%' OR r.value LIKE '%".$hostname."%' ) ORDER BY r.name ASC,r.view ASC;";
+    $result = mysql_query($query) or dberror($query, mysql_error());
+    while($row = mysql_fetch_assoc($result))
+    {
+	echo '<tr>';
+	echo '<td><a href="zone.php?id='.$row['zone_id'].'">'.$row['zone_name'].' ('.$row['zone_id'].')</a></td>';
+	echo '<td>'.$row['name'].'</td>';
+	echo '<td>'.$row['rr_type'].'</td>';
+	echo '<td>'.$row['value'].'</td>';
+	echo '<td>'.$row['view'].'</td>';
+	echo '<td>'.$row['ttl'].'</td>';
+	echo '</tr>'."\n";
+    }
+    echo '</table>'."\n";
+
+    // TXT records
+    echo '<div class="tableTitle"><h3>TXT Records</h3></div>';
+    echo '<table class="minorTableWide">'."\n";
+    echo '<tr><th>Zone</th><th>Name</th><th>Type</th><th>Points To/Value</th><th>View</th><th>ttl</th></tr>'."\n";
+    $query = "SELECT r.*,z.name AS zone_name FROM r_records AS r LEFT JOIN zones AS z ON r.zone_id=z.zone_id WHERE r.rr_type='TXT' AND (r.name LIKE '%".$hostname."%' OR r.value LIKE '%".$hostname."%' ) ORDER BY r.name ASC,r.view ASC;";
+    $result = mysql_query($query) or dberror($query, mysql_error());
+    while($row = mysql_fetch_assoc($result))
+    {
+	echo '<tr>';
+	echo '<td><a href="zone.php?id='.$row['zone_id'].'">'.$row['zone_name'].' ('.$row['zone_id'].')</a></td>';
+	echo '<td>'.$row['name'].'</td>';
+	echo '<td>'.$row['rr_type'].'</td>';
+	echo '<td>'.$row['value'].'</td>';
+	echo '<td>'.$row['view'].'</td>';
+	echo '<td>'.$row['ttl'].'</td>';
+	echo '</tr>'."\n";
+    }
+    echo '</table>'."\n";
+*/
+
+    echo '</div> <!-- close content div -->'."\n";
+}
+
 function showSearchForm()
 {
     echo '<div id="content">'."\n";
@@ -184,6 +324,22 @@ function showSearchForm()
     echo '<form name="hostSearch" method="get">'."\n";
     echo '<h2>Search By Hostname</h2>'."\n";
     echo '<input type="text" name="hostname" size="30" />';
+    echo '<input type="submit" name="Submit" value="Search" />';
+    echo '</form>';
+    echo '</div>'."\n";
+
+    echo '<div>'."\n";
+    echo '<form name="hostSearch" method="get">'."\n";
+    echo '<h2>Search All RRs of Type</h2>'."\n";
+    echo '<select name="type">'."\n";
+    $query = "SELECT DISTINCT rr_type FROM r_records;";
+    $result = mysql_query($query) or dberror($query, mysql_error());
+    while($row = mysql_fetch_assoc($result))
+    {
+	echo '<option value="'.$row['rr_type'].'">'.$row['rr_type'].'</option>'."\n";
+    }
+    echo '<option value="MX">MX</option>'."\n";
+    echo '</select>'."\n";
     echo '<input type="submit" name="Submit" value="Search" />';
     echo '</form>';
     echo '</div>'."\n";

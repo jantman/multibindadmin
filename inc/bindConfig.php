@@ -118,6 +118,17 @@ function makeZoneFile($zone_id, $view)
 	$str .= $row['name']."\t".$row['ttl']."\t".$row['class']."\t"."TXT"."\t".$row['value']."\n";
     }
 
+    $str .= "\n\n; SPF records\n";
+    $str .= "; each should also include a matching TXT record for legacy systems\n";
+    $query = "SELECT name,ttl,class,value FROM r_records WHERE rr_type='SPF' AND zone_id=".$zone_id." AND (view='".$view."' OR view='both');";
+    $result = mysql_query($query) or dberror($query, mysql_error());
+    while($row = mysql_fetch_assoc($result))
+    {
+	if($row['class'] == null || $row['class'] == ""){ $row['class'] = "IN";}
+	$str .= $row['name']."\t".$row['ttl']."\t".$row['class']."\t"."SPF"."\t".$row['value']."\n";
+	$str .= $row['name']."\t".$row['ttl']."\t".$row['class']."\t"."TXT"."\t".$row['value']."\n";
+    }
+
     $str .= "\n\n; PTR records\n";
     $query = "SELECT name,ttl,class,ptr_address FROM ptr_records WHERE zone_id=".$zone_id." AND (view='".$view."' OR view='both');";
     $result = mysql_query($query) or dberror($query, mysql_error());
